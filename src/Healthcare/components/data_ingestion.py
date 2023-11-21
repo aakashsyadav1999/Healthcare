@@ -19,21 +19,27 @@ class DataIngestionConfig:
     test_data_path:str = os.path.join("artifacts","test_data.csv")
     raw_data_path:str = os.path.join("artifacts","raw_data.csv") 
 
-
+#Data Ingestion class
 class DataIngestion:
 
     def __init__(self):
         self.ingestion_config = DataIngestionConfig()
 
         
-
+    #initiate data class
     def initiate_data_config(self):
 
         try:
+            #Reading data
             df = pd.read_csv(r'D:\vscode\Healthcare\Notebook\data\healthcare_dataset.csv')
+            
+            #drop unwanted columns
+            df.drop(columns=['Name','Date of Admission','Billing Amount', 'Discharge Date','Test Results'],inplace=True)
 
+            #Logging message
             logging.info("Reading CSV file")
 
+            #Self ingestion training and test data path
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),
                         exist_ok=True)
             
@@ -41,6 +47,7 @@ class DataIngestion:
                       index = False,
                       header = True)
             
+            #splitting data into train and test part
             train_set,test_set = train_test_split(df,test_size=0.2,random_state=42)
             train_set.to_csv(self.ingestion_config.train_data_path, index = False,header=True)
             test_set.to_csv(self.ingestion_config.test_data_path,index = False, header = True)
@@ -52,6 +59,6 @@ class DataIngestion:
                 self.ingestion_config.test_data_path
             )
         
-
+        #Custom-Exception
         except Exception as e:
             raise CustomException(e,sys)
