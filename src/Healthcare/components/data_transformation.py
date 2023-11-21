@@ -115,7 +115,7 @@ class DataTransformation:
 
             #steps for target encoding
             encoder = TargetEncoder()
-            encode = encoder.fit(x,y)
+            #encode = encoder.fit(x,y)
 
             num_pipeline=Pipeline(steps=[
                 ("imputer",SimpleImputer(strategy='median')),
@@ -138,6 +138,7 @@ class DataTransformation:
                 ]
 
             )
+            
             return preprocessor
 
 
@@ -154,6 +155,8 @@ class DataTransformation:
 
 
             logging.info("Read test and train data completed")
+
+            preprocessing_obj=self.get_data_transformation_object()
 
             #Define Target column
             target_column_name='Test_Results'
@@ -173,26 +176,29 @@ class DataTransformation:
             input_features_encoded_train_df = encoder_train.transform(input_features_train_df)
             input_feature_encoded_test_df = encoder_test.transform(input_features_test_df)
 
-            #Scaling of the training and test dataset
-            logging.info("Scaling of the training and test dataset")
-            scaler = self.standardization()
-            input_features_scaled_train_arr = scaler.fit_transform(input_features_encoded_train_df)
-            input_feature_scaled_test_arr = scaler.transform(input_feature_encoded_test_df)
+            # #Scaling of the training and test dataset
+            # logging.info("Scaling of the training and test dataset")
+            # scaler = self.standardization()
+            # input_features_scaled_train_arr = scaler.fit_transform(input_features_train_df)
+            # input_feature_scaled_test_arr = scaler.transform(input_features_test_df)
 
-            #creating preprocessing obj so while prediction we can preprocess
-            preprocessing_obj = self.get_data_transformation_object(input_features_train_df,target_feature_train_df)
+
+            input_features_scaled_train_arr=preprocessing_obj.fit_transform(input_features_encoded_train_df)
+            input_feature_scaled_test_arr=preprocessing_obj.transform(input_feature_encoded_test_df)
+
 
             #train array
             train_arr = np.c_[
                 input_features_scaled_train_arr, np.array(target_feature_train_df)
             ]
+
             #test array
             test_arr = np.c_[input_feature_scaled_test_arr, np.array(target_feature_test_df)]
 
             #saving pickle file
             save_object(
 
-                file_path=self.data_transformation_config.preprocessor_obj_file,
+                file_path=self.data_tranformation_config.preprocessor_obg_file,
                 obj=preprocessing_obj
             )
             
