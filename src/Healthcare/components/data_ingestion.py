@@ -33,6 +33,9 @@ class DataIngestion:
             #Reading data
             df = pd.read_csv(r'D:\vscode\Healthcare\Notebook\data\healthcare_dataset.csv')
             
+            #Convert target column from categorical to numerical column
+            df['Test Results'] = df['Test Results'].replace({'Normal':0,"Inconclusive":1,"Abnormal":2})
+                     
             #Logging message
             logging.info("Reading CSV file")
 
