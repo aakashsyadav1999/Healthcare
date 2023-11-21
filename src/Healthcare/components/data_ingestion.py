@@ -33,9 +33,6 @@ class DataIngestion:
             #Reading data
             df = pd.read_csv(r'D:\vscode\Healthcare\Notebook\data\healthcare_dataset.csv')
             
-            #drop unwanted columns
-            df.drop(columns=['Name','Date of Admission','Billing Amount', 'Discharge Date','Test Results'],inplace=True)
-
             #Logging message
             logging.info("Reading CSV file")
 
