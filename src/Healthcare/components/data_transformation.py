@@ -40,9 +40,9 @@ class DataTransformation:
         try:
             logging.info("Entered in feature selection method")
             data = data.drop(['Name',
-                              'Date of Admission',
-                              'Billing Amount',
-                              'Discharge Date'], 
+                              'Date_of_Admission',
+                              'Billing_Amount',
+                              'Discharge_Date'], 
                               axis =1)
             data = data.reset_index(drop=True)
 
@@ -156,7 +156,7 @@ class DataTransformation:
             logging.info("Read test and train data completed")
 
             #Define Target column
-            target_column_name='Test Results'
+            target_column_name='Test_Results'
 
             # divide the train dataset to independent and dependent feature
             input_features_train_df=train_df.drop(columns=[target_column_name],axis=1)
