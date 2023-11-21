@@ -1,31 +1,52 @@
-import os 
-import sys
-from src.Healthcare.logger import logging
-from src.Healthcare.exception import CustomException
+from flask import Flask,request,render_template
+import numpy as np
+import pandas as pd
+
+from sklearn.preprocessing import StandardScaler
+from src.Healthcare.pipelines.prediction_pipeline import PredictPipeline,CustomData
+
+application=Flask(__name__)
+
+app=application
+
+## Route for a home page
+
+@app.route('/')
+def index():
+    return render_template('index.html') 
+
+@app.route('/predictdata',methods=['GET','POST'])
+def predict_datapoint():
+    if request.method=='GET':
+        return render_template('home.html')
+    else:
+        data=CustomData(
+            Age = request.form.get('Age'),
+            Gender = request.form.get('Gender'),
+            Blood_Type = request.form.get('Blood_Type'),
+            Medical_Condition = request.form.get('Medical_Condition'),
+            Doctor = request.form.get('Doctor'),
+            Hospital = request.form.get('Hospital'),
+            Insurance_Provider = request.form.get('Insurance_Provider'),
+            Room_Number = request.form.get('Room_Number'),
+            Admission_Type = request.form.get('Admission_Type'),
+            Medication = request.form.get('Medication')
+
+        )
 
 
-from src.Healthcare.components.data_ingestion import DataIngestion,DataIngestionConfig
-from src.Healthcare.components.data_transformation import DataTransformation,DataTransformationConfig
-from src.Healthcare.components.model_trainer import ModelTrainer,ModelTrainerConfig
+        pred_df=data.get_data_as_data_frame()
+        print(pred_df)
+        print("Before Prediction")
 
+        predict_pipeline=PredictPipeline()
+        print("Mid Prediction")
+        results=predict_pipeline.predict(pred_df)
+        prediction_label = "Test_Result" if results[0] == 0 else "____"
+        return render_template('home.html', results=prediction_label)
+    
 
-
-if __name__=='__main__':
-    logging.info("The execution has started")
-
-    try:
-        #These line of code will excute data ingestion file:
-        data_ingestion = DataIngestion()
-        train_data_path,test_data_path = data_ingestion.initiate_data_config()
-
-        #data_transformation_config=DataTransformationConfig()
-        data_transformation=DataTransformation()
-        train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data_path,test_data_path)
-
-
-        #model trainer
-        model_trainer=ModelTrainer()
-        print(model_trainer.initiate_model_trainer(train_arr,test_arr))
-
-    except Exception as e:
-        raise CustomException(e,sys)
+if __name__ == '__main__':
+    app.debug = True
+    app.run(host="0.0.0.0")
+    app.run()        
