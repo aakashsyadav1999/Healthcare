@@ -1,4 +1,4 @@
-Name,Age,Gender,Blood Type,Medical Condition,Date of Admission,Doctor,Hospital,Insurance Provider,Billing Amount,Room Number,Admission Type,Discharge Date,Medication,Test Results
+Name,Age,Gender,Blood_Type,Medical_Condition,Date_of_Admission,Doctor,Hospital,Insurance_Provider,Billing_Amount,Room_Number,Admission_Type,Discharge_Date,Medication,Test_Results
 William Martin,26,Male,AB+,Arthritis,2020-07-27,David Cherry,"Obrien, Rogers and Garcia",Aetna,48228.96275138811,134,Elective,2020-08-09,Ibuprofen,1
 Christopher Campbell,80,Female,A+,Obesity,2022-02-23,Kevin Martin,Pace Group,UnitedHealthcare,5634.310680561106,466,Emergency,2022-03-18,Paracetamol,0
 Kristy Thomas,68,Female,AB+,Diabetes,2020-02-02,Kelly Watts,Berry Group,Cigna,25850.433904634367,155,Urgent,2020-02-17,Ibuprofen,1
