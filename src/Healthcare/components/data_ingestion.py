@@ -35,6 +35,8 @@ class DataIngestion:
             
             #Convert target column from categorical to numerical column
             df['Test Results'] = df['Test Results'].replace({'Normal':0,"Inconclusive":1,"Abnormal":2})
+
+            df.columns = df.columns.str.replace(" ","_")
                      
             #Logging message
             logging.info("Reading CSV file")
