@@ -31,12 +31,12 @@ class DataIngestion:
 
         try:
             #Reading data
-            df = pd.read_csv(r'D:\vscode\Healthcare\Notebook\data\healthcare_dataset.csv')
+            df = pd.read_csv(r'D:\VS code files\Healthcare\Notebook\data\healthcare_dataset.csv')
             
             #Convert target column from categorical to numerical column
             df['Test Results'] = df['Test Results'].replace({'Normal':0,"Inconclusive":1,"Abnormal":2})
 
-            df = df.drop(columns=['Date of Admission','Billing Amount','Discharge Date','Name'],axis=1)
+            #df = df.drop(columns=['Date of Admission','Billing Amount','Discharge Date','Name'],axis=1)
 
             df.columns = df.columns.str.replace(" ","_")
                      
