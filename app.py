@@ -42,7 +42,8 @@ def predict_datapoint():
         predict_pipeline=PredictPipeline()
         print("Mid Prediction")
         results=predict_pipeline.predict(pred_df)
-        prediction_label = "Test_Result" if results[0] == 0 else "____"
+        #prediction_label = "Inconclusive" if results[0] == 1 else 'Normal'
+        prediction_label = "Inconclusive" if results[0] <= 1 else "Normal"
         return render_template('home.html', results=prediction_label)
     
 
