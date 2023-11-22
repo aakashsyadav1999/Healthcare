@@ -47,42 +47,38 @@ class ModelTrainer:
                    'max_depth':[3, 4, 5, 6, 7, 9, 11]
                 }
             }
-            model_report:dict=evaluate_models(X_train,y_train,X_test,y_test,models,params)
-
-            #To get the best model score from dict
+            model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
+                                             models=models,param=params)
+            
+            ## To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
 
-            #To get best name form dict
+            ## To get best model name from dict
+
             best_model_name = list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)
             ]
-            print("This is the best model")
-            best_model=models[best_model_name]
+            best_model = models[best_model_name]
 
-            if best_model_score<0.5:
+            if best_model_score<0.6:
                 raise CustomException("No best model found")
-            logging.info(f"Best found model on both training and testing dataset {best_model}")
-            logging.info(f"Best found model on both training and testing dataset {best_model.get_params()}")
+            logging.info(f"Best found model on both training and testing dataset")
 
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
                 obj=best_model
-                
             )
 
+            predicted=best_model.predict(X_test)
             predicted=best_model.predict(X_test)
             acc = accuracy_score(y_test, predicted)
             prec = precision_score(y_test, predicted,pos_label='positive',average='weighted')
             recall = recall_score(y_test, predicted,pos_label='positive',average='weighted')
-            return acc
-            return prec
-            return recall
+            return best_model, acc, prec, recall
             print(acc)
             print(prec)
             print(recall)
             logging.log(acc,prec,recall)
-            print("Acc: %.2f%%" % (acc * 100.0))
-
-
+                     
         except Exception as e:
-            raise CustomException (e,sys)
+            raise CustomException(e,sys)

@@ -22,10 +22,13 @@ if __name__=='__main__':
         data_transformation=DataTransformation()
         train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data_path,test_data_path)
 
+        logging.info("Data transformation has completed")
 
-        #model trainer
+        logging.info("Model training has started")
         model_trainer=ModelTrainer()
-        print(model_trainer.initiate_model_trainer(train_arr,test_arr))
+        best_model,accuracy, prec, recall = model_trainer.initiate_model_trainer(train_arr, test_arr)
+        logging.info("Model training has completed!! ")
+
 
     except Exception as e:
         raise CustomException(e,sys)
