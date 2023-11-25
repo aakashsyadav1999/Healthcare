@@ -2,7 +2,9 @@ import os
 import sys
 import numpy as np
 from dataclasses import dataclass
-
+import mlflow
+from mlflow.models import infer_signature
+from urllib.parse import urlparse
 
 from src.Healthcare.exception import CustomException
 from src.Healthcare.logger import logging
@@ -11,6 +13,8 @@ from src.Healthcare.utils import save_object, evaluate_models
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score,precision_score,recall_score,log_loss
+from sklearn.metrics import mean_squared_error,mean_absolute_error
+from sklearn.metrics import r2_score
 
 @dataclass
 class ModelTrainerConfig:
@@ -21,6 +25,12 @@ class ModelTrainer:
 
     def __init__(self):
         self.model_trainer_config = ModelTrainerConfig()
+
+    def eval_metrics(self,actual, pred):
+        rmse = np.sqrt(mean_squared_error(actual, pred))
+        mae = mean_absolute_error(actual, pred)
+        r2 = r2_score(actual, pred)
+        return rmse, mae, r2
 
 
     def initiate_model_trainer(self,train_array,test_array):
@@ -60,6 +70,10 @@ class ModelTrainer:
             ]
             best_model = models[best_model_name]
 
+            print(f"This is the best model{best_model}")
+            
+
+            #best_model_Score
             if best_model_score<0.6:
                 raise CustomException("No best model found")
             logging.info(f"Best found model on both training and testing dataset")
